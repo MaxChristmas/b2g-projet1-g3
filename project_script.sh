@@ -30,9 +30,11 @@ addUser()
 	read -p "Nom de l'utilisateur à créer " user_target
 	# cnx ssh
 	ssh -T $targetUsername@$targetIp <<eof
-	sudo useradd -m -s /bin/bash -p $user_target $user_target >> ./temp.txt
+	sudo useradd -m -s /bin/bash -p $user_target $user_target >> ./info_temp.txt
 eof
-	scp $targetUsername@$targetIp:/home/$user_target/temp.txt ~/Documents
+	scp $targetUsername@$targetIp:/home/$user_target/info_temp.txt ~/Documents/
+	echo commande réalisée
+	echo retour au menu
 }
 
 supprUser()
@@ -60,6 +62,7 @@ read -p "Quel est le nom de l'utilisateur cible?" targetUsername
 sshTest
 
 while [ user_actif == 1 ]
+
   do
 echo "	1) Ajouter un utilisateur
 	2) Supprimer un utilisateur
@@ -67,9 +70,9 @@ echo "	1) Ajouter un utilisateur
 	4) Eteindre la machine
 	X) Quitter le programme"
 
-read -p "Votre choix: " cmdChoice
+  read -p "Votre choix: " cmdChoice
 
-case $cmdChoice in
+  case $cmdChoice in
 	1) addUser
 		;;
 	2) supprUser
@@ -78,10 +81,12 @@ case $cmdChoice in
 		;;
 	4) restartTarget
 		;;
-	X) exit
+	X|x) exit
 		;;
-esac
-done
+  esac
+
+done # fin boucle principale
+
 # END OF MAIN
 
 
