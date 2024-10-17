@@ -1,5 +1,11 @@
 #! /bin/bash
 
+# Variables
+
+user_actif=1
+
+#
+
 # Target network testing function
 sshTest()
 {
@@ -12,10 +18,38 @@ sshTest()
 				fi
 		else
 			echo "La cible n'est pas démarrée, ou n'est pas connectée au réseau."
-			exit 1			
+			exit 1
 		fi
 }
 
+#
+# FUNCTIONS
+
+addUser()
+{
+	read -p "Nom de l'utilisateur à créer " user_target
+	# cnx ssh
+	ssh -T $targetUsername@$targetIp <<eof
+	sudo useradd -m -s /bin/bash -p $user_target $user_target >> ./temp.txt
+eof
+	scp $targetUsername@$targetIp:/home/$user_target/temp.txt ~/Documents
+}
+
+supprUser()
+{
+	read -p "Nom de l'utilisateur à supprimer " user_delete
+}
+
+switchOffTarget()
+{
+
+}
+
+restartTarget()
+{
+
+}
+#
 
 # MAIN START
 
@@ -25,23 +59,44 @@ read -p "Quel est le nom de l'utilisateur cible?" targetUsername
 
 sshTest
 
+while [ user_actif == 1 ]
+  do
 echo "	1) Ajouter un utilisateur
 	2) Supprimer un utilisateur
 	3) Redémarrer la machine
 	4) Eteindre la machine
 	X) Quitter le programme"
+
 read -p "Votre choix: " cmdChoice
 
 case $cmdChoice in
-	1 ) #TODO insérer fonction ajout utilisateur
+	1) addUser
 		;;
-	2 ) #TODO insérer fonction suppression utilisateur
+	2) supprUser
 		;;
-	3 ) #TODO insérer fonction éteindre
+	3) switchOffTarget
 		;;
-	4 ) #TODO insérer fonction redémarrage
+	4) restartTarget
 		;;
-	X ) exit
+	X) exit
 		;;
 esac
+done
 # END OF MAIN
+
+
+
+# FUNCTIONS about LOG
+
+addTargetLog()
+{
+
+}
+
+addEventLog()
+{
+
+}
+
+#
+
