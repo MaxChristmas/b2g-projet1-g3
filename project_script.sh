@@ -3,7 +3,11 @@
 # Variables
 
 user_actif=1
-name_info_log=$(date +% "info_<Cible>_%Y%m%d.txt")
+date_info_log=$(date +%Y%m%d)
+name_info_log="info_<Cible>_$date_info_log.txt"
+
+#name_info_log=$(date +% "info_<Cible>_%Y%m%d.txt")
+
 
 # exemple de résultat : génère name_info_log="info_<Cible>_20241018.txt"
 #
@@ -11,7 +15,7 @@ name_info_log=$(date +% "info_<Cible>_%Y%m%d.txt")
 # Target network testing function
 sshTest()
 {
-	ping -c 2 $targetIp >> /dev/null
+	ping -c 2 $targetIp > /dev/null
 		if [[ $? == 0 ]]; then
 			ssh -T $targetUsername@$targetIp "exit"
 				if [[ $? != 0 ]]; then
@@ -36,27 +40,45 @@ addUser()
 eof
 	scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
 
-
-
 	echo commande réalisée
 	echo retour au menu
-
 
 }
 
 supprUser()
 {
 	read -p "Nom de l'utilisateur à supprimer " user_delete
+# cnx ssh
+	ssh -T $targetUsername@$targetIp <<eof
+	sudo deluser --remove-home $user_delete
+eof
+	scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
+
+	echo commande réalisée
+	echo retour au menu
+
 }
 
 switchOffTarget()
 {
-
+	read -p "Êtes-vous sûr de vouloir éteindre ? (O/n)" confirm1
+	if [ "O" = $confirm1 ] || [ -z $confirm1 ]
+	then
+		ssh -T $targetUsername@$targetIp <<eof
+		shutdown -H now
+eof
+	fi
 }
 
 restartTarget()
 {
-
+	read -p "Êtes-vous sûr de vouloir redémarrer ? (O/n)" confirm2
+	if [ "O" = $confirm2 ] || [ -z $confirm2 ]
+	then
+		ssh -T $targetUsername@$targetIp <<eof
+		shutdown -r now
+eof
+	fi
 }
 #
 
@@ -91,7 +113,7 @@ echo "	1) Ajouter un utilisateur
 		;;
 	4) restartTarget
 		;;
-	X|x) exit
+	X|x) user_actif=0
 		;;
   esac
 
@@ -99,19 +121,19 @@ done # fin boucle principale
 
 # END OF MAIN
 
-
+echo -e "Fin de session\n"
 
 # FUNCTIONS about LOG
 
-addTargetLog()
-{
+# addTargetLog()
+#{
 
-}
+#}
 
-addEventLog()
-{
+#addEventLog()
+#{
 
-}
+#}
 
 #
 
