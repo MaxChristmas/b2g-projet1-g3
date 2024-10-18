@@ -17,7 +17,7 @@ sshTest()
 {
 	ping -c 2 $targetIp > /dev/null
 		if [[ $? == 0 ]]; then
-			ssh -T $targetUsername@$targetIp "exit"
+			ssh -T $targetUsername@$targetIp "echo "
 				if [[ $? != 0 ]]; then
 					echo "La cible n'a pas configuré son SSH."
 					exit 1
@@ -91,9 +91,11 @@ read -p "Quel est le nom de l'utilisateur cible : " targetUsername
 name_info_log=$(echo $name_info_log | sed "s/<Cible>/$targetUsername/")
 # exemple : info_<Cible>_20241018.txt  devient  info_user_20241018.txt
 
-sshTest
+
 
 while [ user_actif == 1 ]
+
+  sshTest
 
   do
 echo "	1) Ajouter un utilisateur
