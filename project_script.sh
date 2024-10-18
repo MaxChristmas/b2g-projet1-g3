@@ -50,7 +50,7 @@ supprUser()
 	read -p "Nom de l'utilisateur à supprimer " user_delete
 # cnx ssh
 	ssh -T $targetUsername@$targetIp <<eof
-	sudo deluser --remove-home $user_delete
+	sudo deluser --remove-home $user_delete >> ./$name_info_log
 eof
 	scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
 
