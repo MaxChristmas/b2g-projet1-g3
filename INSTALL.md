@@ -2,7 +2,7 @@
 
 ### Required Elements 💻
 
-- Operationnal Linux hosts (we made this program using a VirtualBox infrastructure including 1 debian 12 and 1 Ubuntu 24.04) in **the same sub-net**.
+- Operational Linux hosts (we made this program using a VirtualBox infrastructure including 1 debian 12 and 1 Ubuntu 24.04) in **the same sub-net**.
 
 - A working **SSH system** between hosts. For help installing, check the SSH configuration below.
 
@@ -80,6 +80,18 @@ In the CLI, type:
 
 ### Installing this amazing script 🥸
 
+- **On the remote computer**, disable password for sudo commands. Using terminal
+
+    ````sudo nano /etc/sudoers````
+
+    Change the line to:
+
+    ````myuser ALL=(ALL) NOPASSWD: ALL````
+for a single user
+
+    ````%sudo  ALL=(ALL) NOPASSWD: ALL````
+for all sudoers group
+
 - Copy the script file where you want **on the "local computer"**
 
 - Change permission to launch the script using terminal:
@@ -87,6 +99,8 @@ In the CLI, type:
 
 - Launch script by typing in terminal:
 ````./project_script.sh````
+
+
 
 
 ### Final Step: ENJOY 🤖
