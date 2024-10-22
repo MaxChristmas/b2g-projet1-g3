@@ -11,22 +11,33 @@
 - Debian 12 (the "server")
     - Download [Debian iso](www.debian.org)
     - Create a new VM 
-    ![new VM](https://neptunet.fr/wp-content/uploads/2020/06/vbox01-2.png)
+
+        ![new VM](https://neptunet.fr/wp-content/uploads/2020/06/vbox01-2.png)
+
     - Name your VM as you wish, and choose path to your ISO file. VirtualBox will recognize the Debian distribution and will change the other parameters.(in the screenshot, this is a Windows10 VM)
-    ![VM config](https://neptunet.fr/wp-content/uploads/2020/06/vbox03.png)
+
+        ![VM config](https://neptunet.fr/wp-content/uploads/2020/06/vbox03.png)
+
     - Then, you have to allocate RAM and CPU cores, we recommend **4Gb RAM and 2 cores**
-    ![RAM](https://neptunet.fr/wp-content/uploads/2020/06/vbox04.png)
+
+        ![RAM](https://neptunet.fr/wp-content/uploads/2020/06/vbox04.png)
+
     - Next step is creating a virtual hard disk. Create at least a **25Gb drive**.
-    ![drive](https://neptunet.fr/wp-content/uploads/2020/06/vbox05.png)
+
+        ![drive](https://neptunet.fr/wp-content/uploads/2020/06/vbox05.png)
+
     - Start your VM to install OS
 
 - Repeat the steps with Ubuntu (Download [here](www.ubuntu.com))
 
 - Setting Subnet configuration:
     - In Virtualbox, go to Files > Tools > NetworkManager and create **a new NAT Network**
-    ![Nat](https://storage.googleapis.com/quest_editor_uploads/lej3BoBrAGdjHUYsdk5UuuhXyfnZ4iMI.png)
+
+        ![Nat](https://storage.googleapis.com/quest_editor_uploads/lej3BoBrAGdjHUYsdk5UuuhXyfnZ4iMI.png)
+        
     - In each VM, in settings, set interface as **NAT Network**:
-    ![Natvm](https://storage.googleapis.com/quest_editor_uploads/4wmuvgnb6GgLEloUL7NiwaG6cwlku2T2.png)
+
+        ![Natvm](https://storage.googleapis.com/quest_editor_uploads/4wmuvgnb6GgLEloUL7NiwaG6cwlku2T2.png)
 
 - Setting Static IP address
     - For each VMs, in your terminal:
