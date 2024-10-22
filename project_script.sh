@@ -41,7 +41,7 @@ eof
 	scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
 
 	echo commande réalisée
-	echo retour au menu
+	echo ''
 
 }
 
@@ -55,9 +55,10 @@ eof
 	scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
 
 	echo commande réalisée
-	echo retour au menu
+	echo ''
 
 }
+
 
 switchOffTarget()
 {
@@ -65,10 +66,15 @@ switchOffTarget()
 	if [ "O" = $confirm1 ] || [ -z $confirm1 ]
 	then
 		ssh -T $targetUsername@$targetIp <<eof
-		shutdown -H now
+		shutdown -H 1
 eof
+		scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
+
+		echo commande réalisée
+		echo ''
 	fi
 }
+
 
 restartTarget()
 {
@@ -76,8 +82,12 @@ restartTarget()
 	if [ "O" = $confirm2 ] || [ -z $confirm2 ]
 	then
 		ssh -T $targetUsername@$targetIp <<eof
-		shutdown -r now
+		shutdown -r 1
 eof
+		scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
+
+		echo commande réalisée
+		echo ''
 	fi
 }
 #
