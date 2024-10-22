@@ -1,8 +1,8 @@
 # INSTALL GUIDE
 
-### Required Elements 💻
+### Prerquisites 💻
 
-- Operational Linux hosts (we made this program using a VirtualBox infrastructure including 1 debian 12 and 1 Ubuntu 24.04) in **the same sub-net**.
+- Operational Linux hosts (we made this program using a VirtualBox infrastructure including 1 debian 12 and 1 Ubuntu 24.04) on **the same sub-net**.
 
 - A working **SSH system** between hosts. For help installing, check the SSH configuration below.
 
@@ -18,17 +18,17 @@
 
         ![VM config](https://neptunet.fr/wp-content/uploads/2020/06/vbox03.png)
 
-    - Then, you have to allocate RAM and CPU cores, we recommend **4Gb RAM and 2 cores**
+      - Allocate RAM and CPU cores, we recommend **4Gb RAM and 2 cores**
 
         ![RAM](https://neptunet.fr/wp-content/uploads/2020/06/vbox04.png)
 
-    - Next step is creating a virtual hard disk. Create at least a **25Gb drive**.
+    - Creating a virtual hard disk. Give it at least a **25Gb drivespace**.
 
         ![drive](https://neptunet.fr/wp-content/uploads/2020/06/vbox05.png)
 
     - Start your VM to install OS
 
-- Repeat the steps with Ubuntu (Download [here](www.ubuntu.com))
+- Repeat the previous steps with Ubuntu (Download [here](www.ubuntu.com))
 
 - Setting Subnet configuration:
     - In Virtualbox, go to Files > Tools > NetworkManager and create **a new NAT Network**
