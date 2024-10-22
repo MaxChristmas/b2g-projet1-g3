@@ -98,7 +98,8 @@ while [ user_actif == 1 ]
   sshTest
 
   do
-echo "	1) Ajouter un utilisateur
+echo "
+	1) Ajouter un utilisateur
 	2) Supprimer un utilisateur
 	3) Redémarrer la machine
 	4) Eteindre la machine
