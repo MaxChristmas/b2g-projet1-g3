@@ -58,6 +58,7 @@ addUser()
 	echo "Création de l'utilisateur « $user_target" » >> ./$name_info_log
 eof
 	scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
+
 	addEventLog "Création de l'utilisateur $user_target"
 	echo commande réalisée
 	echo ''
@@ -82,10 +83,12 @@ switchOffTarget()
 	read -p "Êtes-vous sûr de vouloir éteindre ? (O/n)" confirm1
 	if [ "O" = $confirm1 ] || [ -z $confirm1 ]
 	then
-		ssh -T $targetUsername@$targetIp <<eof
-		sudo shutdown -H 1 >> ./$name_info_log
-eof
+		echo "Reboot scheduled" >> ./$name_info_log
 		scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
+		ssh -T $targetUsername@$targetIp <<eof
+		sudo shutdown -H 1
+eof
+
 		addEventLog "Eteinte dans 1 mn de la machine cible"
 		echo commande réalisée
 		echo ''
@@ -98,10 +101,12 @@ restartTarget()
 	read -p "Êtes-vous sûr de vouloir redémarrer ? (O/n)" confirm2
 	if [ "O" = $confirm2 ] || [ -z $confirm2 ]
 	then
-		ssh -T $targetUsername@$targetIp <<eof
-		sudo shutdown -r 1 >> ./$name_info_log
-eof
+		echo "Restart scheduled" >> ./$name_info_log
 		scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
+		ssh -T $targetUsername@$targetIp <<eof
+		sudo shutdown -r 1
+eof
+
 		addEventLog "Redémarrage dans 1 mn de la machine cible"
 		echo commande réalisée
 		echo ''
@@ -124,20 +129,19 @@ name_info_log=$(echo $name_info_log | sed "s/<Cible>/$targetUsername/")
 
 # MAIN LOOP
 
-while [ $user_actif == 1 ]
-
-  sshTest
-
+while [ $user_actif -eq 1 ]
   do
+	sshTest
+
 echo "
 	1) Ajouter un utilisateur
 	2) Supprimer un utilisateur
-	3) Redémarrer la machine
-	4) Eteindre la machine
+	3) Eteindre la machine
+	4) Redémarrer la machine
 	X) Quitter le programme"
 
-  addEventLog "Prompt Attente commande"
-  read -p "Votre choix: " cmdChoice
+	addEventLog "Prompt Attente commande"
+	read -p "Votre choix: " cmdChoice
 
   case $cmdChoice in
 	1) addUser
