@@ -1,35 +1,51 @@
 #! /bin/bash
 
-# Variables
+# Variables globales
 
 user_actif=1
+
 date_info_log=$(date +%Y%m%d)
 name_info_log="info_<Cible>_$date_info_log.txt"
 
-#name_info_log=$(date +% "info_<Cible>_%Y%m%d.txt")
+name_event_log='/var/log/log_evnt.log'
 
-
-# exemple de résultat : génère name_info_log="info_<Cible>_20241018.txt"
 #
+
+# FUNCTIONS
+
+addEventLog()
+{
+# initialisation des variables
+	date_event=$(date +%Y%m%d)
+	time_event=$(date +%H%M%S)
+	user_event=$USER
+	label_event=$1				# premier argument de la FONCTION (et non du script)
+
+# construction du message à logguer sur le modèle '<Date>-<Heure>-<Utilisateur>-<Evenement>'
+	message="$date_event-$time_event-$user_event-$label_event"
+
+# écriture en fin de fichier log
+	echo $message >> name_event_log
+}
 
 # Target network testing function
 sshTest()
 {
 	ping -c 2 $targetIp > /dev/null
-		if [[ $? == 0 ]]; then
+
+	if [[ $? == 0 ]]; then
 			ssh -T $targetUsername@$targetIp "echo "
-				if [[ $? != 0 ]]; then
-					echo "La cible n'a pas configuré son SSH."
-					exit 1
-				fi
-		else
+			if [[ $? != 0 ]]; then
+				echo "La cible n'a pas configuré son SSH."
+			exit 1
+			fi
+	else
 			echo "La cible n'est pas démarrée, ou n'est pas connectée au réseau."
 			exit 1
-		fi
-}
+	fi
 
-#
-# FUNCTIONS
+	addEventLog "Test OK de la connexion SSH"
+}
 
 addUser()
 {
@@ -39,10 +55,9 @@ addUser()
 	sudo useradd -m -s /bin/bash -p $user_target $user_target >> ./$name_info_log
 eof
 	scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
-
+	addEventLog "Création de l'utilisateur $user_target"
 	echo commande réalisée
 	echo ''
-
 }
 
 supprUser()
@@ -53,10 +68,9 @@ supprUser()
 	sudo deluser --remove-home $user_delete >> ./$name_info_log
 eof
 	scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
-
+	addEventLog "Suppression de l'utilisateur $user_target"
 	echo commande réalisée
 	echo ''
-
 }
 
 
@@ -69,7 +83,7 @@ switchOffTarget()
 		shutdown -H 1
 eof
 		scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
-
+		addEventLog "Eteinte dans 1 mn de la machine cible"
 		echo commande réalisée
 		echo ''
 	fi
@@ -85,7 +99,7 @@ restartTarget()
 		shutdown -r 1
 eof
 		scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
-
+		addEventLog "Redémarrage dans 1 mn de la machine cible"
 		echo commande réalisée
 		echo ''
 	fi
@@ -94,15 +108,18 @@ eof
 
 # MAIN START
 
+addEventLog '********StartScript********'
+
 # Asking user to input target IP address & target username
 read -p "Quelle est l'adresse IP de la cible : " targetIp
 read -p "Quel est le nom de l'utilisateur cible : " targetUsername
 
+# Build target log name with target username
 name_info_log=$(echo $name_info_log | sed "s/<Cible>/$targetUsername/")
-# exemple : info_<Cible>_20241018.txt  devient  info_user_20241018.txt
+# exemple : info_<Cible>_20241018.txt  devient  info_patrice_20241018.txt
 
 
-
+# MAIN LOOP
 while [ user_actif == 1 ]
 
   sshTest
@@ -115,6 +132,7 @@ echo "
 	4) Eteindre la machine
 	X) Quitter le programme"
 
+  addEventLog "Prompt Attente commande"
   read -p "Votre choix: " cmdChoice
 
   case $cmdChoice in
@@ -132,21 +150,9 @@ echo "
 
 done # fin boucle principale
 
-# END OF MAIN
-
+addEventLog '********EndScript********'
 echo -e "Fin de session\n"
 
-# FUNCTIONS about LOG
+# END OF MAIN
 
-# addTargetLog()
-#{
-
-#}
-
-#addEventLog()
-#{
-
-#}
-
-#
 
