@@ -13,6 +13,7 @@ name_event_log='/var/log/log_evnt.log'
 
 # FUNCTIONS
 
+
 addEventLog()
 {
 # initialisation des variables
@@ -25,7 +26,7 @@ addEventLog()
 	message="$date_event-$time_event-$user_event-$label_event"
 
 # écriture en fin de fichier log
-	echo $message >> name_event_log
+	echo $message >> $name_event_log
 }
 
 # Target network testing function
@@ -52,9 +53,11 @@ addUser()
 	read -p "Nom de l'utilisateur à créer " user_target
 	# cnx ssh
 	ssh -T $targetUsername@$targetIp <<eof
-	sudo useradd -m -s /bin/bash -p $user_target $user_target >> ./$name_info_log
+	sudo useradd -m -s /bin/bash -p $user_target $user_target
+# On écrit directement sur le log car useradd ne renvoie aucun message en cas de succès
+	echo "Création de l'utilisateur « $user_target" » >> ./$name_info_log
 eof
-	scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
+	scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
 	addEventLog "Création de l'utilisateur $user_target"
 	echo commande réalisée
 	echo ''
@@ -67,8 +70,8 @@ supprUser()
 	ssh -T $targetUsername@$targetIp <<eof
 	sudo deluser --remove-home $user_delete >> ./$name_info_log
 eof
-	scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
-	addEventLog "Suppression de l'utilisateur $user_target"
+	scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
+	addEventLog "Suppression de l'utilisateur $user_delete"
 	echo commande réalisée
 	echo ''
 }
@@ -82,7 +85,7 @@ switchOffTarget()
 		ssh -T $targetUsername@$targetIp <<eof
 		shutdown -H 1
 eof
-		scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
+		scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
 		addEventLog "Eteinte dans 1 mn de la machine cible"
 		echo commande réalisée
 		echo ''
@@ -98,7 +101,7 @@ restartTarget()
 		ssh -T $targetUsername@$targetIp <<eof
 		shutdown -r 1
 eof
-		scp $targetUsername@$targetIp:/home/$user_target/$name_info_log ~/Documents/
+		scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
 		addEventLog "Redémarrage dans 1 mn de la machine cible"
 		echo commande réalisée
 		echo ''
@@ -116,11 +119,12 @@ read -p "Quel est le nom de l'utilisateur cible : " targetUsername
 
 # Build target log name with target username
 name_info_log=$(echo $name_info_log | sed "s/<Cible>/$targetUsername/")
-# exemple : info_<Cible>_20241018.txt  devient  info_patrice_20241018.txt
+# exemple : info_<Cible>_20241018.txt  devient  info_wilder_20241018.txt
 
 
 # MAIN LOOP
-while [ user_actif == 1 ]
+
+while [ $user_actif == 1 ]
 
   sshTest
 
@@ -154,5 +158,3 @@ addEventLog '********EndScript********'
 echo -e "Fin de session\n"
 
 # END OF MAIN
-
-
