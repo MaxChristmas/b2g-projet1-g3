@@ -57,7 +57,7 @@ addUser()
 # On écrit directement sur le log car useradd ne renvoie aucun message en cas de succès
 	echo "Création de l'utilisateur « $user_target" » >> ./$name_info_log
 eof
-	scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
+	scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 	addEventLog "Création de l'utilisateur $user_target"
 	echo commande réalisée
 	echo ''
@@ -70,7 +70,7 @@ supprUser()
 	ssh -T $targetUsername@$targetIp <<eof
 	sudo deluser --remove-home $user_delete >> ./$name_info_log
 eof
-	scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
+	scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 	addEventLog "Suppression de l'utilisateur $user_delete"
 	echo commande réalisée
 	echo ''
@@ -83,9 +83,9 @@ switchOffTarget()
 	if [ "O" = $confirm1 ] || [ -z $confirm1 ]
 	then
 		ssh -T $targetUsername@$targetIp <<eof
-		shutdown -H 1 >> ./$name_info_log
+		sudo shutdown -H 1 >> ./$name_info_log
 eof
-		scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
+		scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 		addEventLog "Eteinte dans 1 mn de la machine cible"
 		echo commande réalisée
 		echo ''
@@ -99,9 +99,9 @@ restartTarget()
 	if [ "O" = $confirm2 ] || [ -z $confirm2 ]
 	then
 		ssh -T $targetUsername@$targetIp <<eof
-		shutdown -r 1 >> ./$name_info_log
+		sudo shutdown -r 1 >> ./$name_info_log
 eof
-		scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
+		scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 		addEventLog "Redémarrage dans 1 mn de la machine cible"
 		echo commande réalisée
 		echo ''
