@@ -83,7 +83,7 @@ switchOffTarget()
 	if [ "O" = $confirm1 ] || [ -z $confirm1 ]
 	then
 		ssh -T $targetUsername@$targetIp <<eof
-		shutdown -H 1
+		shutdown -H 1 >> ./$name_info_log
 eof
 		scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
 		addEventLog "Eteinte dans 1 mn de la machine cible"
@@ -99,7 +99,7 @@ restartTarget()
 	if [ "O" = $confirm2 ] || [ -z $confirm2 ]
 	then
 		ssh -T $targetUsername@$targetIp <<eof
-		shutdown -r 1
+		shutdown -r 1 >> ./$name_info_log
 eof
 		scp $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ~/Documents/
 		addEventLog "Redémarrage dans 1 mn de la machine cible"
