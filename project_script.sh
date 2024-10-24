@@ -110,7 +110,9 @@ switchOffTarget()
 	read -p "Êtes-vous sûr de vouloir éteindre ? (O/n)" confirm1
 	if [ "O" = $confirm1 ] || [ -z $confirm1 ]
 	then
-		echo "Reboot scheduled" >> ./$name_info_log
+		ssh -T $targetUsername@$targetIp <<eof
+		echo "Halt scheduled"  >> ./$name_info_log
+eof
 		scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 		ssh -T $targetUsername@$targetIp <<eof
 		sudo shutdown -H 1
@@ -128,7 +130,9 @@ restartTarget()
 	read -p "Êtes-vous sûr de vouloir redémarrer ? (O/n)" confirm2
 	if [ "O" = $confirm2 ] || [ -z $confirm2 ]
 	then
-		echo "Restart scheduled" >> ./$name_info_log
+		ssh -T $targetUsername@$targetIp <<eof
+		echo "Reboot scheduled" >> ./$name_info_log
+eof
 		scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 		ssh -T $targetUsername@$targetIp <<eof
 		sudo shutdown -r 1
