@@ -2,7 +2,7 @@
 
 # Variables globales
 
-user_actif=1
+user_active=1
 
 date_info_log=$(date +%Y%m%d)
 name_info_log="info_<Cible>_$date_info_log.txt"
@@ -13,7 +13,7 @@ name_event_log='/var/log/log_evnt.log'
 
 # FUNCTIONS
 
-
+# Generic function - add a line to name_event_log file
 addEventLog()
 {
 # initialisation des variables
@@ -27,6 +27,16 @@ addEventLog()
 
 # écriture en fin de fichier log
 	echo $message >> $name_event_log
+}
+
+# Init (or touch) name_event_log file - reset chmod 666 and owner - to avoid sudo
+checkEventLog()
+{
+	sudo touch /var/log/log_evnt.log
+	sudo chmod 666 $name_event_log
+	sudo chown $USER:$USER $name_event_log
+	echo "** Touch $name_event_log **" >> $name_event_log
+# cat /var/log/log_evnt.log
 }
 
 # Target network testing function
@@ -134,6 +144,8 @@ eof
 
 # MAIN START
 
+checkEventLog
+
 addEventLog '********StartScript********'
 
 # Asking user to input target IP address & target username
@@ -148,7 +160,7 @@ name_info_log=$(echo $name_info_log | sed "s/<Cible>/$targetUsername/")
 
 # MAIN LOOP
 
-while [ $user_actif -eq 1 ]
+while [ $user_active -eq 1 ]
   do
 	sshTest
 
@@ -174,7 +186,7 @@ echo "
 		;;
 	5) restartTarget
 		;;
-	X|x) user_actif=0
+	X|x) user_active=0
 		;;
   esac
 
