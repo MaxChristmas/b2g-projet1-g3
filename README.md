@@ -14,10 +14,13 @@ The script produced should work on any linux framework although we used VMbox an
 
 
 **Network Setup:**
-The network utilizes an SSH connection between machines, allowing for the execution of scripts from the server's terminal on a remote computer.
+The network utilizes an SSH connection between machines, allowing for the execution of scripts from the server's terminal on a remote computer. follow our [install guide here](https://github.com/MaxChristmas/b2g-projet1-g3/blob/main/INSTALL.md)
 
 
 **Available Commands:**
 - Add/remove users on the client side
+- List current users client side
 - Reboot the client machine
 - Shut down the client machine remotely
+
+Check our [user guide here](https://github.com/MaxChristmas/b2g-projet1-g3/blob/main/UserGuide.md) to get started right now!!!
