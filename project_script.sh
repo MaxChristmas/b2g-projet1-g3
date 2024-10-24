@@ -38,10 +38,12 @@ sshTest()
 			ssh -T $targetUsername@$targetIp "echo "
 			if [[ $? != 0 ]]; then
 				echo "La cible n'a pas configuré son SSH."
+				addEventLog '** Echec de connexion - EndScript **'
 				exit 1
 			fi
 	else
 			echo "La cible n'est pas démarrée, ou n'est pas connectée au réseau."
+			addEventLog '** Echec de connexion - EndScript **'
 			exit 1
 	fi
 
@@ -85,6 +87,7 @@ listUsers()
 # cnx ssh
 	ssh -T $targetUsername@$targetIp <<eof
 	grep /home/.*/ /etc/passwd
+	grep /home/.*/ /etc/passwd  >> ./$name_info_log
 eof
 #	scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 	addEventLog "Listage des utilisateurs"
@@ -152,7 +155,7 @@ while [ $user_actif -eq 1 ]
 echo "
 	1) Ajouter un utilisateur
 	2) Supprimer un utilisateur
-	2) Lister les utilisateurs
+	3) Lister les utilisateurs
 	4) Eteindre la machine
 	5) Redémarrer la machine
 	X) Quitter le programme"
