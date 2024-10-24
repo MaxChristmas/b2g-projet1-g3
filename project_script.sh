@@ -38,7 +38,7 @@ sshTest()
 			ssh -T $targetUsername@$targetIp "echo "
 			if [[ $? != 0 ]]; then
 				echo "La cible n'a pas configuré son SSH."
-			exit 1
+				exit 1
 			fi
 	else
 			echo "La cible n'est pas démarrée, ou n'est pas connectée au réseau."
@@ -53,10 +53,12 @@ addUser()
 	read -p "Nom de l'utilisateur à créer " user_target
 	# cnx ssh
 	ssh -T $targetUsername@$targetIp <<eof
-	sudo useradd -m -s /bin/bash -p $user_target $user_target
-# On écrit directement sur le log car useradd ne renvoie aucun message en cas de succès
-	echo "Création de l'utilisateur « $user_target" » >> ./$name_info_log
+	sudo useradd -m -s /bin/bash -p $user_target $user_target >> ./$name_info_log
+	if [[ $? == 0 ]]; then
+		echo "Création de l'utilisateur « $user_target »" >> ./$name_info_log
+	fi
 eof
+	# le script ssh teste la valeur de sortie, car en cas de succès, useradd ne renvoie rien
 	scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 
 	addEventLog "Création de l'utilisateur $user_target"
@@ -73,6 +75,19 @@ supprUser()
 eof
 	scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 	addEventLog "Suppression de l'utilisateur $user_delete"
+	echo commande réalisée
+	echo ''
+}
+
+listUsers()
+{
+# ne liste que les utilisateurs ayant un dossier créé dans /home/
+# cnx ssh
+	ssh -T $targetUsername@$targetIp <<eof
+	grep /home/.*/ /etc/passwd
+eof
+#	scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
+	addEventLog "Listage des utilisateurs"
 	echo commande réalisée
 	echo ''
 }
@@ -123,8 +138,9 @@ read -p "Quelle est l'adresse IP de la cible : " targetIp
 read -p "Quel est le nom de l'utilisateur cible : " targetUsername
 
 # Build target log name with target username
+# example : $targetUsername='wilder' ; <Cible> in string is replaced by wilder
 name_info_log=$(echo $name_info_log | sed "s/<Cible>/$targetUsername/")
-# exemple : info_<Cible>_20241018.txt  devient  info_wilder_20241018.txt
+
 
 
 # MAIN LOOP
@@ -136,8 +152,9 @@ while [ $user_actif -eq 1 ]
 echo "
 	1) Ajouter un utilisateur
 	2) Supprimer un utilisateur
-	3) Eteindre la machine
-	4) Redémarrer la machine
+	2) Lister les utilisateurs
+	4) Eteindre la machine
+	5) Redémarrer la machine
 	X) Quitter le programme"
 
 	addEventLog "Prompt Attente commande"
@@ -148,9 +165,11 @@ echo "
 		;;
 	2) supprUser
 		;;
-	3) switchOffTarget
+	3) listUsers
 		;;
-	4) restartTarget
+	4) switchOffTarget
+		;;
+	5) restartTarget
 		;;
 	X|x) user_actif=0
 		;;
