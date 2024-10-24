@@ -1,6 +1,6 @@
 # INSTALL GUIDE
 
-### Prerquisites 💻
+### Prerequisites 💻
 
 - Operational Linux hosts (we made this program using a VirtualBox infrastructure including 1 debian 12 and 1 Ubuntu 24.04) on **the same sub-net**.
 
