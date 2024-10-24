@@ -35,8 +35,7 @@ checkEventLog()
 	sudo touch $name_event_log
 	sudo chmod 666 $name_event_log
 	sudo chown $USER:$USER $name_event_log
-	echo "** Touch $name_event_log **" >> $name_event_log
-# cat /var/log/log_evnt.log
+	echo "== Touch $name_event_log ==" >> $name_event_log
 }
 
 # Target network testing function
@@ -48,12 +47,12 @@ sshTest()
 			ssh -T $targetUsername@$targetIp "echo "
 			if [[ $? != 0 ]]; then
 				echo "La cible n'a pas configuré son SSH."
-				addEventLog '** Echec de connexion - EndScript **'
+				addEventLog '**Echec de connexion - EndScript**'
 				exit 1
 			fi
 	else
 			echo "La cible n'est pas démarrée, ou n'est pas connectée au réseau."
-			addEventLog '** Echec de connexion - EndScript **'
+			addEventLog '**Echec de connexion - EndScript**'
 			exit 1
 	fi
 
@@ -117,7 +116,7 @@ switchOffTarget()
 		sudo shutdown -H 1
 eof
 
-		addEventLog "Eteinte dans 1 mn de la machine cible"
+		addEventLog "Arrêt dans 1 mn de la machine cible"
 		echo commande réalisée
 		echo ''
 	fi
@@ -153,7 +152,7 @@ read -p "Quelle est l'adresse IP de la cible : " targetIp
 read -p "Quel est le nom de l'utilisateur cible : " targetUsername
 
 # Build target log name with target username
-# example : $targetUsername='wilder' ; <Cible> in string is replaced by wilder
+# example : targetUsername='wilder' ; <Cible> in string is replaced by wilder
 name_info_log=$(echo $name_info_log | sed "s/<Cible>/$targetUsername/")
 
 
@@ -168,7 +167,7 @@ echo "
 	1) Ajouter un utilisateur
 	2) Supprimer un utilisateur
 	3) Lister les utilisateurs
-	4) Eteindre la machine
+	4) Éteindre la machine
 	5) Redémarrer la machine
 	X) Quitter le programme"
 
