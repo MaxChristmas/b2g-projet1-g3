@@ -32,7 +32,7 @@ addEventLog()
 # Init (or touch) name_event_log file - reset chmod 666 and owner - to avoid sudo
 checkEventLog()
 {
-	sudo touch /var/log/log_evnt.log
+	sudo touch $name_event_log
 	sudo chmod 666 $name_event_log
 	sudo chown $USER:$USER $name_event_log
 	echo "** Touch $name_event_log **" >> $name_event_log
