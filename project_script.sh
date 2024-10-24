@@ -99,7 +99,7 @@ listUsers()
 	grep /home/.*/ /etc/passwd
 	grep /home/.*/ /etc/passwd  >> ./$name_info_log
 eof
-#	scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
+	scp -q $targetUsername@$targetIp:/home/$targetUsername/$name_info_log ./Documents/$name_info_log
 	addEventLog "Listage des utilisateurs"
 	echo commande réalisée
 	echo ''
